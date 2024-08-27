@@ -1,6 +1,3 @@
-import http from 'node:http'
-
-
 // GET => Buscar um recurso do back-end
 // POST => Criar um recurso no back-end
 // PUT => Atualizar um recurso no back-end
@@ -14,27 +11,42 @@ import http from 'node:http'
 
 // HTTP Status Code
 
-const users = []
+// Query Parameters: URL Stateful => Filtros, paginação, não-obrigatórios
+// Route Parameters: Identificação de recursos
+// Request Body: Envio de informacções de um formulário (HTTPs)
 
-const server = http.createServer((req, res) => {
+// http://localhost:3333/users?userId=1&name=Filipe
+// http://localhost:3333/users/1
+// POST http://localhost:3333/users
+
+// Edicção e Remoção
+
+
+
+import http from 'node:http'
+import { json } from './middlewares/json.js'
+import { routes } from './routes.js'
+
+
+
+const server = http.createServer(async (req, res) => {
     const { method, url} = req
 
-    if(method ===  'GET' && url === '/users'){
-        return res
-        .setHeader('Content-Type', 'application/json')
-        .end(JSON.stringify(users))
+    await json(req, res)
+
+    const route = routes.find(route => { 
+        return route.method === method && route.path.test(url)
+    })
+
+    if (route) {
+        const routeParams = req.url.match(route.path)
+
+        console.log(routeParams)
+        
+        return route.handler(req, res)
     }
 
-    if(method === 'POST' && url === '/users'){
-        users.push({
-            id: 1,
-            name: 'Jao Bala',
-            email: 'JaoBala@gmail.com',
-        })
-        return res.writeHead(201).end()
-        }
-
-    return res.writeHead(404).end('Not Found')
+    return res.writeHead(404).end()
 
 })
 
