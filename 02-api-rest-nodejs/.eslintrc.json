@@ -1,10 +1,11 @@
-{   
-    
-    "rules": {
-        "linebreak-style": ["error", "unix"]  // Muda para "unix" (LF)
-    },
-      
-      
-    "extends":
-        "@rocketseat/eslint-config/node",
+{    
+    "extends":[
+        "@rocketseat/eslint-config/node"
+    ],
+    "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
 }
