@@ -7,6 +7,17 @@ import { checkSessionIdExists } from "../middlewares/check-session-id-exists";
 
 // Cookies <--> Formas da gente manter contexto entre requisições
 
+// unítarios: unidade da sua aplicação (teste)
+// integração: comunicação entre duas ou mais unidades
+// e2e - ponta a ponta: simulam um usuário operando na nossa aplicação
+
+// front-end: abre a página de login, digite blablabla no campo com ID email, clique no botão
+// back-end: chamada HTTP, WebSockets
+
+// Pirâmide de testes: E2E ( não dependem de nenhuma tecnologia, não dependem de arquitetura)
+//
+
+
 export async function transactionsRoutes(app: FastifyInstance) {
 
   app.get(
@@ -26,10 +37,10 @@ export async function transactionsRoutes(app: FastifyInstance) {
 
     const transactions = await knex("transactions")
     .where('session_id', sessionId)
-    .select();
+    .select()
 
-    return { transactions };
-  });
+    return { transactions }
+  })
 
   app.get(
     "/:id",
